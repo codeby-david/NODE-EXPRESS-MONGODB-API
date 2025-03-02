@@ -1,7 +1,8 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+
+const Product = require('./models/product.model.js'); // Ensure this path is correct
 require('dotenv').config();
 
 // Middleware to parse JSON bodies
@@ -26,7 +27,83 @@ app.get('/', (req, res) => {
   res.send("Hello there! Welcome to the home page of the app");
 });
 
-app.post('/api/products',(req, res) => {
-  console.log(req.body);
-  res.send(req.body);
-})
+
+
+
+//get by id
+app.get('/api/products/:id',async (req, res) => {
+  try{
+      const product = await Product.findById(id);
+}catch(err){
+  res.status(500).json({message: 'Product not found'});
+  
+}
+  });
+
+//api for getting products from database
+app.get('/api/products',  async (req, res) => {
+  try{
+      const products =  await Product.find({});
+
+    res.status(200).json(products);
+
+  }
+  catch{
+    res.status(500).json({message: 'Products not found'});
+  }
+});
+
+
+
+
+
+// Create a new product
+app.post('/api/products', async (req, res) => {
+  try {
+    // Corrected: Use `Product` (the model) and `req.body`
+    await Product.create(req.body);
+    res.status(200).json({message: 'Product created successfully'});
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
+//update product
+app.put('/api/products/:id', async (req, res) => {
+  try{
+
+    const {id} = req.params;
+    await Product.findByIdAndUpdate(id, req.body);
+    if(!Product){
+      res.status(404).json({message: 'Product not found'})
+    }
+    else{
+const UpdateProduct = await Product.findById(id);
+res.status(200).json(UpdateProduct);
+
+
+
+    }
+
+  }catch{
+    res.status(500).json({message: 'Product not found'});
+  }
+});
+//delete product
+app.delete('/api/products/:id', async (req, res) => {
+  try{
+
+    const {id} = req.params;
+   await Product.findByIdAndDelete(id);
+    if(!Product){
+      res.status(404).json({message: 'Product not found'})
+    }
+    else{
+      res.status(200).json({message: 'Product deleted successfully'});
+    }
+  }
+  catch(err){
+    res.status(500).json({message:message.err});
+  }
+});

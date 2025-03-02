@@ -7,7 +7,7 @@ name:{
   type:String,
   required:[true, 'Product name requires']
 },
-quatity:{
+quantity:{
   type:Number,
   required:false,
   default:0
