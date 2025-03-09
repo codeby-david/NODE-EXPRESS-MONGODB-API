@@ -5,7 +5,7 @@ const ProductSchema = mongoose.Schema(
 {
 name:{
   type:String,
-  required:[true, 'Product name requires']
+  required:[true, 'Product name required']
 },
 quantity:{
   type:Number,
@@ -15,7 +15,7 @@ quantity:{
 },
 price:{
   type:Number,
-  required:[true, 'Product price requires'],
+  required:[true, 'Product price required'],
   default:0
 },
 image:{
